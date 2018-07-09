@@ -15,11 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/index', function(){
+Route::post('/index', function() {
     return view('index');
 });
 
 Route::view('/new',"new");
+
+Route::get('/game', function() {
+    return view('game');
+});
 
 Route::delete('/todos/{id}/delete', 'TodoController@destroy')->name('todos.destroy');
 Route::post('/todos/{id}', 'TodoController@update');

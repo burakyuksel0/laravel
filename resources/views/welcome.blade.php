@@ -78,8 +78,9 @@
                 </div>
                 
                 <div style="font-weight:bond">
-                    <a class="btn btn-success" href="/todos">Show Todo List</a>
-                    
+                    <a class="btn btn-primary" href="/todos">Todo List</a>
+                    <br />
+                    <a style="margin: 5px" class="btn btn-primary" href="/game">Play Mines</a>
                 </div>
             </div>
         </div>

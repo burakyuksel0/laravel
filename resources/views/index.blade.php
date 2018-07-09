@@ -4,6 +4,17 @@
   <script>
     document.getElementById("create_todo_button").style.visibility = "visible";
   </script>
+  <style>
+    #check-column {
+      width: 100px;
+    }
+    #title-column {
+      width: 300px;
+    }
+    #date-column {
+      width: 200px;
+    }
+  </style>
 
   <body>
 
@@ -24,6 +35,7 @@
       <table id="myTable" class="table table-striped">
       <thead>
         <tr>
+          <th>Check</th>
           <th>Title</th>
           <th>Due Date</th>
           <th>Action</th>
@@ -37,17 +49,19 @@
           $date=date('Y-m-d', $todo['date']);
         @endphp
         <tr>
-          <td>{{$todo['title']}}</td>
-          <td>{{Carbon\Carbon::parse($todo->due_date)->format('d-m-Y')}}</td>
-          <td>
+          <td id="check-column">
+            <form action="{{action('TodoController@destroy', $todo['id'])}}" method="post">
+              @csrf
+              @method('delete')
+              <button type="submit" class="btn btn-success">✓</button>
+            </form>            
+          </td>
+          <td id="title-column">{{$todo['title']}}</td>
+          <td id="date-column">{{Carbon\Carbon::parse($todo->due_date)->format('d-m-Y')}}</td>
+          <td id="action-column">
             <div class="row">
-              <a style="margin-left:1em" href="{{action('TodoController@show', $todo['id'])}}" class="btn btn-primary">Show</a>
-              <a style="margin-left:1em" id="{{$todo['id']}}" href="#" class="btn btn-warning editButton" data-toggle="modal" data-target="#editModal">Edit</a>
-              <form style="margin-left: 1em" action="{{action('TodoController@destroy', $todo['id'])}}" method="post">
-                @csrf
-                @method('delete')
-                <button type="submit" style="margin-right:20px" class="btn btn-danger">Delete</button>
-              </form>     
+              <a href="{{action('TodoController@show', $todo['id'])}}" class="btn btn-primary">Show</a>
+              <a style="margin-left:1em" id="{{$todo['id']}}" href="#" class="btn btn-warning editButton" data-toggle="modal" data-target="#editModal">Edit</a>     
             </div>
           </td>
           

@@ -56,6 +56,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             </li>
+                            <li class="nav-item"> 
+                                    <a class="nav-link" href="/game">Play Mines</a>
+                            </li>
                         @else
                             <li id="create_todo_button" style="visibility: hidden" class="nav-item">
                                 <a class="nav-link" id="createButton" href="#" data-toggle="modal" data-target="#createModal">Create Todo</a>
@@ -81,6 +84,9 @@
                                         @csrf
                                     </form>
                                 </div>
+                            </li>
+                            <li class="nav-item"> 
+                                    <a class="nav-link" href="/game">Play Mines</a>
                             </li>
                         @endguest
                     </ul>

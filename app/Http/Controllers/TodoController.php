@@ -131,6 +131,6 @@ class TodoController extends Controller
             return redirect('todos')->with('warning', 'Unauthorized operation');
         }
         
-        return redirect('todos')->with('success', 'Information has been deleted');
+        return redirect('todos')->with('success', 'Congrats, job done!');
     }
 }
