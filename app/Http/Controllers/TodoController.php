@@ -20,13 +20,21 @@ class TodoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $todos=\App\Todo::where('user_id', Auth::id())->orderBy('due_date')->paginate(5);
-        
+        $isExpired = $request->get("expired");
 
-        return view('index',compact('todos'));
+        
+        $todos=\App\Todo::where('user_id', Auth::id());
+
+        if ($isExpired == "no") {
+            $todos = $todos->whereRaw('due_date > now()');
+        }
+        
+        $todos= $todos->orderBy('due_date')->paginate(5);
+    
+        return view('index',['todos'=>$todos, 'isExpired'=>$isExpired]);
     }
 
     /**

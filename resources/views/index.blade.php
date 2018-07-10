@@ -14,6 +14,11 @@
     #date-column {
       width: 200px;
     }
+
+    .btn-gray {
+      background-color: lightgray;
+      color: black;
+    }
   </style>
 
   <body>
@@ -32,46 +37,59 @@
         </div><br />
       @endif
 
-      <table id="myTable" class="table table-striped">
+      <div style="text-align: right;">
+        <form id="expired_form" method="GET">
+          <input name="expired" value="no" {{ ($isExpired=="no") ? 'checked="checked"': ''}} id="hide_expired_todos" type="checkbox">Don't show expired todos</input>
+        </form>
+      </div>
+      <br />
+
+      <table id="todoTable" class="table table-striped">
       <thead>
         <tr>
           <th>Check</th>
           <th>Title</th>
           <th>Due Date</th>
           <th>Action</th>
+          <th>Warning</th>
         </tr>
       </thead>
       <tbody>
 
-        @for($i = 0; $i < sizeof($todos); $i++)
-        @php
-          $todo = $todos[$i];
-          $date=date('Y-m-d', $todo['date']);
-        @endphp
-        <tr>
-          <td id="check-column">
-            <form action="{{action('TodoController@destroy', $todo['id'])}}" method="post">
-              @csrf
-              @method('delete')
-              <button type="submit" class="btn btn-success">✓</button>
-            </form>            
-          </td>
-          <td id="title-column">{{$todo['title']}}</td>
-          <td id="date-column">{{Carbon\Carbon::parse($todo->due_date)->format('d-m-Y')}}</td>
-          <td id="action-column">
-            <div class="row">
-              <a href="{{action('TodoController@show', $todo['id'])}}" class="btn btn-primary">Show</a>
-              <a style="margin-left:1em" id="{{$todo['id']}}" href="#" class="btn btn-warning editButton" data-toggle="modal" data-target="#editModal">Edit</a>     
-            </div>
-          </td>
-          
-        </tr>
-        @endfor
+        @foreach($todos as $i => $todo)
+          <tr id="row_{{$i}}">
+            <td id="check-column">
+              <form action="{{action('TodoController@destroy', $todo['id'])}}" method="post">
+                @csrf
+                @method('delete')
+                <button type="submit" class="btn btn-success">✓</button>
+              </form>            
+            </td>
+            <td id="title-column">{{$todo['title']}}</td>
+            <td id="date-column">{{Carbon\Carbon::parse($todo->due_date)->format('d-m-Y')}}</td>
+            <td id="action-column">
+              <div class="row">
+                <a href="{{action('TodoController@show', $todo['id'])}}" class="btn btn-gray">Show</a>
+                <a style="margin-left:1em" id="{{$todo['id']}}" href="#" class="btn btn-warning editButton" data-toggle="modal" data-target="#editModal">Edit</a>     
+              </div>
+            </td>
+            <td style="color: red; font-weight: bold">
+              @php
+                $date = Carbon\Carbon::parse($todo->due_date)->format('d-m-Y');
+                $diff = strtotime($date) - time();
+                $daydiff = round($diff / (60 * 60 * 24));
+                if($daydiff >= 0 && $daydiff < 3) {
+                  echo $daydiff . " days left!";
+                }
+              @endphp
+            </td>
+          </tr>
+        @endforeach
       </tbody>
     </table>
 
     <div style="text-align: center">
-      {{ $todos->links() }}
+      <p>{{ $todos->appends(["expired" => $isExpired])->links() }}</p>
     </div>
 
     <div class="modal fade" id="createModal" role="dialog">
@@ -103,5 +121,10 @@
     $(".editButton").click(function(){
       $("#addEdit").load("/todos/".concat(this.id).concat("/edit"));
     });
+
+    $("#hide_expired_todos").click(function() {
+      $("#expired_form").submit();
+    });
+
   </script>
 @endsection

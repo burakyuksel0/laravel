@@ -5,7 +5,7 @@
     <div class="container">
         @csrf
         <div class="row">
-            <div class="col-md-4"></div>
+            <div class="col-md-2"></div>
             <div class="form-group col-md-6">    
                 <table id="entry" style="font-size:20px">
                     <tr>
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4"></div>
+            <div class="col-md-2"></div>
             <div class="form-group col-md-2">
                 <a class="btn btn-primary" href="{{action('TodoController@index')}}">Back</a>
             </div>
