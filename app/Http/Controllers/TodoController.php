@@ -32,7 +32,7 @@ class TodoController extends Controller
             $todos = $todos->whereRaw('due_date > now()');
         }
         
-        $todos= $todos->orderBy('due_date')->paginate(5);
+        $todos= $todos->orderBy('due_date')->get();
     
         return view('index',['todos'=>$todos, 'isExpired'=>$isExpired]);
     }

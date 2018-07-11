@@ -27,6 +27,7 @@ Route::get('/game', function() {
 
 Route::delete('/todos/{id}/delete', 'TodoController@destroy')->name('todos.destroy');
 Route::post('/todos/{id}', 'TodoController@update');
+Route::post('getTodos', 'TodoController@getTodos');
 Route::post('/todos', 'TodoController@store');
 Route::get('/todos/create', 'TodoController@create');
 Route::get('/todos/{id}', 'TodoController@show');
@@ -36,3 +37,4 @@ Route::get('/todos', 'TodoController@index')->name('todos');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/getTodos', "DatatablesController@getTodos")->name("todos.index");

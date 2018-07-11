@@ -22,7 +22,6 @@
   </style>
 
   <body>
-
     <div class="container">
       <br />
       @if (\Session::has('success'))
@@ -33,7 +32,7 @@
 
       @if (\Session::has('warning'))
         <div class="alert alert-danger">
-          <p>{{ \Session::get('warning') }}</p>
+          <p>{{ \Session::get('warning') }}</p> 
         </div><br />
       @endif
 
@@ -44,7 +43,16 @@
       </div>
       <br />
 
-      <table id="todoTable" class="table table-striped">
+      <table id="todoTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Due Date</th>   
+          </tr>
+        </thead>
+      </table>
+
+      <table id="" class="table table-striped">
       <thead>
         <tr>
           <th>Check</th>
@@ -57,7 +65,7 @@
       <tbody>
 
         @foreach($todos as $i => $todo)
-          <tr id="row_{{$i}}">
+          <tr>
             <td id="check-column">
               <form action="{{action('TodoController@destroy', $todo['id'])}}" method="post">
                 @csrf
@@ -73,12 +81,14 @@
                 <a style="margin-left:1em" id="{{$todo['id']}}" href="#" class="btn btn-warning editButton" data-toggle="modal" data-target="#editModal">Edit</a>     
               </div>
             </td>
-            <td style="color: red; font-weight: bold">
+            <td id="warning-column" style="color: red; font-weight: bold">
               @php
                 $date = Carbon\Carbon::parse($todo->due_date)->format('d-m-Y');
                 $diff = strtotime($date) - time();
                 $daydiff = round($diff / (60 * 60 * 24));
                 if($daydiff >= 0 && $daydiff < 3) {
+                  if($daydiff == -0)
+                    $daydiff = 0;
                   echo $daydiff . " days left!";
                 }
               @endphp
@@ -87,10 +97,6 @@
         @endforeach
       </tbody>
     </table>
-
-    <div style="text-align: center">
-      <p>{{ $todos->appends(["expired" => $isExpired])->links() }}</p>
-    </div>
 
     <div class="modal fade" id="createModal" role="dialog">
       <div class="modal-dialog">
@@ -111,10 +117,24 @@
     </div>
 
   </div>
-  
   </body>
 
   <script>
+  
+    $(document).ready( function () {
+        $('#todoTable').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+              "url": "/getTodos"
+            },
+            "columns": [
+              { "data" : "title" },
+              { "data" : "due_date" },
+            ],
+        });
+    } );
+      
     $("#createButton").click(function(){
       $("#addCreate").load("/todos/create");
     });

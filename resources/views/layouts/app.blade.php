@@ -21,6 +21,9 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
@@ -56,9 +59,6 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             </li>
-                            <li class="nav-item"> 
-                                    <a class="nav-link" href="/game">Play Mines</a>
-                            </li>
                         @else
                             <li id="create_todo_button" style="visibility: hidden" class="nav-item">
                                 <a class="nav-link" id="createButton" href="#" data-toggle="modal" data-target="#createModal">Create Todo</a>
@@ -84,9 +84,6 @@
                                         @csrf
                                     </form>
                                 </div>
-                            </li>
-                            <li class="nav-item"> 
-                                    <a class="nav-link" href="/game">Play Mines</a>
                             </li>
                         @endguest
                     </ul>
