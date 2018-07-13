@@ -38,65 +38,21 @@
 
       <div style="text-align: right;">
         <form id="expired_form" method="GET">
-          <input name="expired" value="no" {{ ($isExpired=="no") ? 'checked="checked"': ''}} id="hide_expired_todos" type="checkbox">Don't show expired todos</input>
+          <input name="hideExpired" value="yes" {{ ($hideExpired=="yes") ? 'checked="checked"': ''}} id="hide_expired_todos" type="checkbox">Don't show expired todos</input>
         </form>
       </div>
       <br />
 
-      <table id="todoTable">
+      <table id="todoTable" class="table-hover row-border">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Due Date</th>   
+            <th style="width: 120px">Check/Edit</th>
+            <th style="max-width: 400px">Title</th>
+            <th>Due Date</th>
+            <th>Warning</th>
           </tr>
         </thead>
       </table>
-
-      <table id="" class="table table-striped">
-      <thead>
-        <tr>
-          <th>Check</th>
-          <th>Title</th>
-          <th>Due Date</th>
-          <th>Action</th>
-          <th>Warning</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        @foreach($todos as $i => $todo)
-          <tr>
-            <td id="check-column">
-              <form action="{{action('TodoController@destroy', $todo['id'])}}" method="post">
-                @csrf
-                @method('delete')
-                <button type="submit" class="btn btn-success">✓</button>
-              </form>            
-            </td>
-            <td id="title-column">{{$todo['title']}}</td>
-            <td id="date-column">{{Carbon\Carbon::parse($todo->due_date)->format('d-m-Y')}}</td>
-            <td id="action-column">
-              <div class="row">
-                <a href="{{action('TodoController@show', $todo['id'])}}" class="btn btn-gray">Show</a>
-                <a style="margin-left:1em" id="{{$todo['id']}}" href="#" class="btn btn-warning editButton" data-toggle="modal" data-target="#editModal">Edit</a>     
-              </div>
-            </td>
-            <td id="warning-column" style="color: red; font-weight: bold">
-              @php
-                $date = Carbon\Carbon::parse($todo->due_date)->format('d-m-Y');
-                $diff = strtotime($date) - time();
-                $daydiff = round($diff / (60 * 60 * 24));
-                if($daydiff >= 0 && $daydiff < 3) {
-                  if($daydiff == -0)
-                    $daydiff = 0;
-                  echo $daydiff . " days left!";
-                }
-              @endphp
-            </td>
-          </tr>
-        @endforeach
-      </tbody>
-    </table>
 
     <div class="modal fade" id="createModal" role="dialog">
       <div class="modal-dialog">
@@ -122,26 +78,51 @@
   <script>
   
     $(document).ready( function () {
-        $('#todoTable').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
-              "url": "/getTodos"
+      var hideExpired = document.getElementById("hide_expired_todos").checked;
+
+      $('#todoTable').DataTable( {
+        searching: false,
+        info: false,
+        lengthMenu: [5, 10, 20, 50],
+        order: [[2, 'asc']],
+        ajax: {
+          url: "/getTodos",
+          data: { "hideExpired" : hideExpired }
+        },
+        columns: [
+          { data: "check",
+            render: function(data) {
+              return '<form method="post" action="/todos/' + data + '/delete">'
+                + '@csrf'
+                + '@method("delete")'
+                + '<button type="submit" class="btn btn-success d">✓</button>'
+                + '<a onclick="editClick(' + data + ')" style="margin-left:1em" class="editButton btn btn-warning" data-toggle="modal" data-target="#editModal"><i style="color: white; font-size:14px" class="material-icons">&#xe254;</i></a>'
+                + '</form>';
             },
-            "columns": [
-              { "data" : "title" },
-              { "data" : "due_date" },
-            ],
-        });
+            searchable: false, orderable: false
+          },
+          { data: "title", },
+          { data: "due_date", searchable: false },
+          { data : "warning",
+            render: function(data) {
+              var color = "red";
+              if(data == "Expired!")
+                color = "gray";
+
+              return '<span style="color:' + color + '; font-weight: bold">' + data + '</span>'
+            },
+            searchable: false, orderable: false
+          },
+        ],
+      });
     } );
-      
+
     $("#createButton").click(function(){
       $("#addCreate").load("/todos/create");
     });
-    $(".editButton").click(function(){
-      $("#addEdit").load("/todos/".concat(this.id).concat("/edit"));
-    });
-
+    function editClick(id){
+      $("#addEdit").load("/todos/" + id + "/edit");
+    }
     $("#hide_expired_todos").click(function() {
       $("#expired_form").submit();
     });

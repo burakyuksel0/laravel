@@ -22,19 +22,9 @@ class TodoController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        $isExpired = $request->get("expired");
+        $hideExpired = $request->get('hideExpired');
 
-        
-        $todos=\App\Todo::where('user_id', Auth::id());
-
-        if ($isExpired == "no") {
-            $todos = $todos->whereRaw('due_date > now()');
-        }
-        
-        $todos= $todos->orderBy('due_date')->get();
-    
-        return view('index',['todos'=>$todos, 'isExpired'=>$isExpired]);
+        return view('index', ['hideExpired'=>$hideExpired]);
     }
 
     /**
