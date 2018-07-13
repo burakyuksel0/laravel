@@ -1,37 +1,28 @@
-@extends('layouts.app')
-
-@section('content')
-  <body>
-    <div class="container">
-        @csrf
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="form-group col-md-6">    
-                <table id="entry" style="font-size:20px">
-                    <tr>
-                        <td style={>Title: {{$todo->title}}</td>
-                    </tr>
-                    <tr style="font-size:18px">
-                        <td>Due: {{Carbon\Carbon::parse($todo->due_date)->format('d-m-Y')}}</td>
-                    </tr>
-                    <tr style="font-size:16px">
-                        <td style="white-space: pre-line">Description:<br>{{$todo->explanation}}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="form-group col-md-2">
-                <a class="btn btn-primary" href="{{action('TodoController@index')}}">Back</a>
-            </div>
-        </div>
+<br />
+<div class="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="form-group col-md-6">
+        <strong>Title:</strong>  
+        <input disabled class="form-control" type="text" name="title" autocomplete="off" value="{{$todo->title}}" autofocus>   
+      </div>
     </div>
-    <script type="text/javascript">  
-        $('#datepicker').datepicker({ 
-            autoclose: true,   
-            format: 'dd-mm-yyyy'  
-         });  
-    </script>
-  </body>
-  @endsection
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="form-group col-md-7">
+        <strong>Description:</strong><br>
+      <textarea disabled class="form-control" rows="10" name="explanation">{{$todo->explanation}}</textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="form-group col-md-4">
+        <strong>Due Date:</strong>  
+        <input disabled class="date form-control" type="text" id="datepicker" autocomplete="off" textmode="date" name="due_date" value={{Carbon\Carbon::parse($todo->due_date)->format('d-m-Y')}}>   
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div>

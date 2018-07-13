@@ -4,22 +4,6 @@
   <script>
     document.getElementById("create_todo_button").style.visibility = "visible";
   </script>
-  <style>
-    #check-column {
-      width: 100px;
-    }
-    #title-column {
-      width: 300px;
-    }
-    #date-column {
-      width: 200px;
-    }
-
-    .btn-gray {
-      background-color: lightgray;
-      color: black;
-    }
-  </style>
 
   <body>
     <div class="container">
@@ -46,7 +30,7 @@
       <table id="todoTable" class="table-hover row-border">
         <thead>
           <tr>
-            <th style="width: 120px">Check/Edit</th>
+            <th style="width: 180px">Check/Edit</th>
             <th style="max-width: 400px">Title</th>
             <th>Due Date</th>
             <th>Warning</th>
@@ -72,6 +56,15 @@
       </div>
     </div>
 
+    <div class="modal fade" id="showModal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div id="addShow">
+            </div>
+          </div>
+        </div>
+      </div>
+
   </div>
   </body>
 
@@ -96,7 +89,8 @@
                 + '@csrf'
                 + '@method("delete")'
                 + '<button type="submit" class="btn btn-success d">✓</button>'
-                + '<a onclick="editClick(' + data + ')" style="margin-left:1em" class="editButton btn btn-warning" data-toggle="modal" data-target="#editModal"><i style="color: white; font-size:14px" class="material-icons">&#xe254;</i></a>'
+                + '<a onclick="editClick(' + data + ')" style="margin-left:1em" class="editButton btn btn-warning" data-toggle="modal" data-target="#editModal"><i style="color: white; font-size:14px; margin: auto" class="material-icons">&#xe254;</i></a>'
+                + '<a onclick="showClick(' + data + ')" style="margin-left:1em" class="showButton btn btn-primary" data-toggle="modal" data-target="#showModal"><i style="color: white; font-size:16px; margin-top: 4px" class="material-icons">&#xe417;</i></a>'
                 + '</form>';
             },
             searchable: false, orderable: false
@@ -120,8 +114,11 @@
     $("#createButton").click(function(){
       $("#addCreate").load("/todos/create");
     });
-    function editClick(id){
+    function editClick(id) {
       $("#addEdit").load("/todos/" + id + "/edit");
+    }
+    function showClick(id) {
+      $("#addShow").load("/todos/" + id);
     }
     $("#hide_expired_todos").click(function() {
       $("#expired_form").submit();
