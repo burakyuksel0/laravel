@@ -88,8 +88,8 @@
               return '<form method="post" action="/todos/' + data + '/delete">'
                 + '@csrf'
                 + '@method("delete")'
-                + '<button type="submit" class="btn btn-success d">✓</button>'
-                + '<a onclick="editClick(' + data + ')" style="margin-left:1em" class="editButton btn btn-warning" data-toggle="modal" data-target="#editModal"><i style="color: white; font-size:14px; margin: auto" class="material-icons">&#xe254;</i></a>'
+                + '<button type="submit" class="btn btn-success d"><i style="color: white; font-size:16px; margin-top: 4px" class="material-icons">&#xe5ca;</i></button>'
+                + '<a onclick="editClick(' + data + ')" style="margin-left:1em" class="editButton btn btn-warning" data-toggle="modal" data-target="#editModal"><i style="color: white; font-size:16px; margin-top: 4px" class="material-icons">&#xe254;</i></a>'
                 + '<a onclick="showClick(' + data + ')" style="margin-left:1em" class="showButton btn btn-primary" data-toggle="modal" data-target="#showModal"><i style="color: white; font-size:16px; margin-top: 4px" class="material-icons">&#xe417;</i></a>'
                 + '</form>';
             },
